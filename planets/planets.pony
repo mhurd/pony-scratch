@@ -2,6 +2,7 @@ use "time"
 use collections = "collections"
 
 actor Planet
+
   let _name: String
   let _earthYearMultiplier: F32
   var _year: F32 = 0
@@ -11,12 +12,14 @@ actor Planet
     _earthYearMultiplier = earthYearMultiplier'
 
   fun year(): F32 => _year
+
   fun earthYearMultiplier(): F32 => _earthYearMultiplier  
-  fun calOneEarthYear(): F32 => year() + earthYearMultiplier()
+
   // needs to be a ref function as it modified a variable
-  fun ref rotateOneEarthYear(): F32 =>
-    _year = calOneEarthYear()
+  fun ref oneEarthYearPasses(): F32 =>
+    _year = year() + earthYearMultiplier()
     year()
+
   fun name(): String => _name
 
   be printDetails(env: Env) => 
@@ -24,7 +27,7 @@ actor Planet
 
   be rotateEarthYears(env: Env, years: USize) =>
     for i in collections.Range(0, years) do 
-      rotateOneEarthYear()
+      oneEarthYearPasses()
       env.out.print("An Earth year passes, " + year().string() 
         + " " + name() + " years have now passed.")
     end
